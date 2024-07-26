@@ -24,6 +24,8 @@ public class User implements UserDetails {
     @NotNull
     private String username;
 
+    private String description;
+
     @NotNull
     private String email;
 
@@ -36,12 +38,14 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    // Getters para id e email, caso não estejam sendo gerados automaticamente
     public Long getId() {
         return id;
     }
 
     public String getEmail() {
+        return email;
+    }
+    public String getDescription() {
         return email;
     }
 

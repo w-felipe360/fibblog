@@ -1,4 +1,4 @@
 package com.fibboproject.backend.dto;
 
-public class AuthDto {
+public record AuthDto(String username, String password){
 }
