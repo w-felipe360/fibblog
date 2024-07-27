@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +33,11 @@ public class User implements UserDetails {
     @NotNull
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
@@ -45,6 +51,7 @@ public class User implements UserDetails {
     public String getEmail() {
         return email;
     }
+
     public String getDescription() {
         return email;
     }
