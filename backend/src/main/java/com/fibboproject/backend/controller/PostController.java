@@ -37,7 +37,7 @@ public class PostController {
 
         User user = (User) userService.loadUserByUsername(username);
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Handle this case appropriately
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Post post = new Post(data.getTitle(), data.getDescription(), user);
@@ -74,7 +74,7 @@ public class PostController {
         Optional<Post> post = postService.findById(postId);
 
         if (post.isEmpty() || !post.get().getUser().getUsername().equals(username)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Handle this case appropriately
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         Post updatedPost = postService.updatePost(postId, data.getTitle(), data.getDescription());
@@ -95,7 +95,7 @@ public class PostController {
         Optional<Post> post = postService.findById(postId);
 
         if (post.isEmpty() || !post.get().getUser().getUsername().equals(username)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Handle this case appropriately
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         postService.deletePost(postId);

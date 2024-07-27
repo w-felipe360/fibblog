@@ -27,33 +27,29 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(CreateUserDto createUserDto) {
-        userRepository.findByUsername(createUserDto.username()).ifPresent(user -> {
-            throw new IllegalArgumentException("Username already taken");
-        });
-
         userRepository.findByEmail(createUserDto.email()).ifPresent(user -> {
             throw new IllegalArgumentException("Email already registered");
         });
 
         String hashedPassword = passwordEncoder.encode(createUserDto.password());
         User user = new User(
-                createUserDto.username(),
+                createUserDto.name(),
                 createUserDto.email(),
-                hashedPassword
+                hashedPassword,
+                null
         );
         return userRepository.save(user);
     }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getDescription()))
+                .map(user -> new UserDto(user.getId(), user.getName(), user.getDescription(), user.getEmail()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
     }
 }
-

@@ -23,37 +23,27 @@ public class User implements UserDetails {
     private Long id;
 
     @NotNull
-    private String username;
-
-    private String description;
+    private String name;
 
     @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotNull
     private String password;
+
+    private String description;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    public User(String username, String email, String password) {
-        this.username = username;
+    public User(String name, String email, String password, String description) {
+        this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getDescription() {
-        return email;
+        this.description = description;
     }
 
     @Override
@@ -68,7 +58,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override
@@ -89,5 +79,21 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

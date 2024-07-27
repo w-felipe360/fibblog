@@ -21,7 +21,6 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    // Recupera todos os comentários associados a um post
     public List<Comment> getCommentsByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }
