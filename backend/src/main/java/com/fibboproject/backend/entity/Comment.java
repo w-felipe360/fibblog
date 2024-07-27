@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Optional;
+
 @Entity
 @Table(name = "comments")
 @Getter
@@ -32,5 +34,18 @@ public class Comment {
         this.text = text;
         this.user = user;
         this.post = post;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public String getText() {
+        return text;
+    }
+    public User getUser() {
+        return user;
+    }
+    public Post getPost() {
+        return post;
     }
 }

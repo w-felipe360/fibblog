@@ -11,6 +11,7 @@ public class CreatePostDto {
     @NotBlank(message = "Título obrigatório!")
     private String title;
 
+    @NotBlank(message = "Descrição obrigatória!")
     private String description;
 
     public String getTitle() {

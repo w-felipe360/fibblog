@@ -1,9 +1,7 @@
 package com.fibboproject.backend.controller;
 
 import com.fibboproject.backend.dto.CreatePostDto;
-import com.fibboproject.backend.dto.CreateUserDto;
 import com.fibboproject.backend.dto.PostDto;
-import com.fibboproject.backend.dto.UserDto;
 import com.fibboproject.backend.entity.Post;
 import com.fibboproject.backend.entity.User;
 import com.fibboproject.backend.service.PostService;
