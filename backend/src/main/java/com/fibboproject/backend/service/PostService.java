@@ -23,4 +23,17 @@ public class PostService {
     public Optional<Post> findById(Long id) {
         return postRepository.findById(id);
     }
+    public Post updatePost(Long postId, String title, String description) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        post.setTitle(title);
+        post.setDescription(description);
+
+        return postRepository.save(post);
+    }
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        postRepository.delete(post);
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -64,5 +65,40 @@ public class PostController {
 
         return ResponseEntity.ok(postDtos);
     }
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @RequestBody @Valid CreatePostDto data) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
+        User user = (User) userService.loadUserByUsername(username);
+        Optional<Post> post = postService.findById(postId);
+
+        if (post.isEmpty() || !post.get().getUser().getUsername().equals(username)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Handle this case appropriately
+        }
+
+        Post updatedPost = postService.updatePost(postId, data.getTitle(), data.getDescription());
+        PostDto responseDto = new PostDto(
+                updatedPost.getId(),
+                updatedPost.getTitle(),
+                updatedPost.getDescription(),
+                updatedPost.getUser().getId()
+        );
+        return ResponseEntity.ok(responseDto);
+    }
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = (User) userService.loadUserByUsername(username);
+        Optional<Post> post = postService.findById(postId);
+
+        if (post.isEmpty() || !post.get().getUser().getUsername().equals(username)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Handle this case appropriately
+        }
+
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
+    }
 }
