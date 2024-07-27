@@ -27,6 +27,14 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(CreateUserDto createUserDto) {
+        userRepository.findByUsername(createUserDto.username()).ifPresent(user -> {
+            throw new IllegalArgumentException("Username already taken");
+        });
+
+        userRepository.findByEmail(createUserDto.email()).ifPresent(user -> {
+            throw new IllegalArgumentException("Email already registered");
+        });
+
         String hashedPassword = passwordEncoder.encode(createUserDto.password());
         User user = new User(
                 createUserDto.username(),
@@ -48,3 +56,4 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }
+
