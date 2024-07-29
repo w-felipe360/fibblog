@@ -1,10 +1,11 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { fakeUsers, User } from "../data/fakeUsers";
-// import api from "../services/api"; // importar o serviço de API
+import { User } from "../data/fakeUsers";
+import api from "../services/api";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   user?: User;
 }
@@ -19,26 +20,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = async (username: string, password: string) => {
     try {
-      console.log(username, password);
+      const response = await api.post("/auth/login", { username, password });
 
-      // Exemplo de chamada à API real
-      // const response = await api.post("/api/login", { username, password });
+      if (response.status === 200) {
+        const user = response.data.user;
+        const token = response.data.token;
 
-      // Verificar o status da resposta
-      // if (response.status === 200) {
-      //   // A resposta vai conter o usuário
-      //   const user = response.data.user;
-      //   setIsAuthenticated(true);
-      //   setUser(user);
-      // } else {
-      //   throw new Error("Login failed");
-      // }
-
-      // Simulação da chamada de API para fins de desenvolvimento
-      const userData = fakeUsers[username];
-      if (userData && userData.password === password) {
         setIsAuthenticated(true);
-        setUser(userData.user);
+        setUser(user);
+
+        localStorage.setItem("authToken", token);
       } else {
         throw new Error("Login failed");
       }
@@ -48,13 +39,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const response = await api.post("/users", { name, email, password });
+
+      if (response.status === 201) {
+        const user = response.data.user;
+        const token = response.data.token;
+
+        setIsAuthenticated(true);
+        setUser(user);
+        localStorage.setItem("authToken", token);
+      } else {
+        throw new Error("Registration failed");
+      }
+    } catch (err) {
+      console.log(err);
+      throw new Error("Registration failed");
+    }
+  };
+
   const logout = () => {
     setIsAuthenticated(false);
     setUser(undefined);
+    localStorage.removeItem("authToken");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, register, logout, user }}>
       {children}
     </AuthContext.Provider>
   );

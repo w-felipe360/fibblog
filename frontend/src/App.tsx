@@ -6,12 +6,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PostDetails from "./pages/PostDetails";
 import UserDetails from "./pages/UserDetails";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/post/:id" element={<PostDetails />} />
         <Route path="/post/:id/edit" element={<EditPost />} />
