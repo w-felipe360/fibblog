@@ -42,7 +42,7 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
     ```bash
     docker-compose up --build
     
-Por padrão, o front-end será executado na porta 3000 e o back-end na porta 8080.
+> **Nota:** Por padrão, o front-end será executado na porta `3000` e o back-end na porta `8080`.
 
 ### Screenshots:
 
