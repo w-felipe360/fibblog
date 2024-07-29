@@ -41,6 +41,8 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 3. **Inicie os conteiners:**
     ```bash
     docker-compose up --build
+    
+Por padrão, o front-end será executado na porta 3000 e o back-end na porta 8080.
 
 ### Screenshots:
 
