@@ -98,3 +98,18 @@ Você pode tentar acessar as rotas através de uma aplicação de requisição, 
 #### CRUD Systems:
 
 <img src="https://github.com/w-felipe360/images/blob/main/routesInsomnia.png?raw=true" alt="CRUD Systems" width="600">
+
+## Futuro
+
+Planejo continuar trabalhando no projeto e adicionando mais funcionalidades. Se você tiver alguma sugestão, sinta-se à vontade para me informar ou contribuir.
+
+Contato: (91) 98951-2027
+
+Email: w.felipebraz@gmail.com
+
+Linkedin: https://www.linkedin.com/in/will-felipe/
+
+Funcionalidades futuras:
+- Criação de categorias. (Já é possível através de rotas com requisições)
+- Edição de perfil para usuários com descrição e fotos
+- Testes unitários
