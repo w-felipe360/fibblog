@@ -90,3 +90,11 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 A API foi criada para integração com o frontend com os seguintes Controladores:
 
 <img src="https://github.com/w-felipe360/images/blob/main/routesbackendFibbo.png?raw=true" alt="API Controllers" width="600">
+
+### ROTAS:
+
+Você pode tentar acessar as rotas através de uma aplicação de requisição, como por exemplo o Insomnia
+
+#### CRUD Systems:
+
+<img src="https://github.com/w-felipe360/images/blob/main/routesInsomnia.png?raw=true" alt="CRUD Systems" width="600">
