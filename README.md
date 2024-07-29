@@ -38,9 +38,19 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 2. **Navegue até o diretório do projeto:**
     ```bash
     cd fibblog
-3. **Inicie os conteiners**
+3. **Inicie os conteiners:**
     ```bash
     docker-compose up -d
-4. **Assim que o banco iniciar, inicie o conteiner do back-end**
+4. **Assim que o banco iniciar, inicie o conteiner do back-end:**
     ```bash
     docker-compose start fibblog-backend
+
+### Screenshots:
+
+#### Tela de login:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/fibblogLoginScreen.jpeg" alt="Tela de login" width="600">
+
+#### Tela de registro:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/registerScreenFibbo.jpeg"alt="Tela de registro" width="600">
