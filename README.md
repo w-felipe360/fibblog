@@ -12,6 +12,7 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 - **Spring Boot**
 - **Spring Security** (para autenticação JWT)
 - **MySQL** (para banco de dados)
+- **Hibernate** (para mapeamento objeto-relacional)
 - **Docker** (para containerização)
 
 ### Front-end
@@ -112,3 +113,4 @@ Funcionalidades futuras:
 - Criação de categorias. (Já é possível através de rotas com requisições)
 - Edição de perfil para usuários com descrição e fotos
 - Testes unitários
+- Deploy
