@@ -47,10 +47,40 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 
 ### Screenshots:
 
-#### Tela de login:
+#### Tela de Login:
 
 <img src="https://raw.githubusercontent.com/w-felipe360/images/main/fibblogLoginScreen.jpeg" alt="Login screen" width="600">
 
-#### Registration Screen:
+#### Tela de Registro:
 
 <img src="https://raw.githubusercontent.com/w-felipe360/images/main/registerScreenFibbo.jpeg" alt="Login screen" width="600">
+
+### Tela inicial:
+
+<img src="https://github.com/w-felipe360/images/blob/main/homeScreenFibblog.jpeg" alt="Home screen" width="600">
+
+
+### Postagens e comentários:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/comments.jpeg" alt="Comments screen" width="600">
+
+### Edição de comentários:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/editComment.jpeg" alt="editing comments screen" width="600">
+
+### Remoção de comentários:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/deleteComment.jpeg" alt="Removing comments screen" width="600">
+
+### Nova postagem:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/NewPostFibbo.jpeg" alt="New post Screen" width="600">
+
+
+### Remover postagem:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/DeletePost.jpeg" alt="Remove post screen" width="600">
+
+### Edição de postagem:
+
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/EditPost.jpeg" alt="Editing post screen" width="600">
