@@ -84,3 +84,9 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 ### Edição de postagem:
 
 <img src="https://raw.githubusercontent.com/w-felipe360/images/main/EditPost.jpeg" alt="Editing post screen" width="600">
+
+### API:
+
+A API foi criada para integração com o frontend com os seguintes Controladores:
+
+<img src="https://github.com/w-felipe360/images/blob/main/routesbackendFibbo.png?raw=true" alt="API Controllers" width="600">
