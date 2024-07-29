@@ -1,25 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import Post from "../components/Post";
 import Sidebar from "../components/Sidebar";
 import { useAuth } from "../contexts/AuthContext";
-import posts from "../data/posts";
-// import useFetchPosts from "../hooks/useFetchPosts";
+import useFetchPosts from "../hooks/useFetchPosts";
+import { PostType } from "../types/api";
 
 const Home: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
+  const { data, loading, error } = useFetchPosts<PostType[]>("/posts");
 
-  // const { data, loading, error } = useFetchPosts<PostType[]>("/posts"); // Utilizar o endpoint relativo
+  const [posts, setPosts] = useState<PostType[]>([]);
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error}</div>;
+  useEffect(() => {
+    if (data) {
+      setPosts(data);
+    }
+  }, [data]);
+
+  const handleDeletePost = (postId: number) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   if (!isAuthenticated || !user) {
     return <Navigate to="/" />;
   }
-
-  console.log(user);
 
   return (
     <div
@@ -34,8 +43,8 @@ const Home: React.FC = () => {
 
       <div className="flex justify-center lg:justify-between lg:mx-[5%] mt-2 flex-1 mb-10">
         <Sidebar />
-        <main className="flex flex-col w-[90%] lg:w-[80%] lg:items-end overflow-auto min-h-96">
-          <div className="flex flex-col bg-white rounded-lg min-h-[100%]">
+        <main className="flex flex-col w-[90%] lg:w-[80%] lg:items-center overflow-auto min-h-96">
+          <div className="flex flex-col bg-white rounded-lg min-h-[100%] w-full">
             <div className="max-h-[calc(100vh-150px)] overflow-y-auto rounded-lg scrollbar-hidden">
               <div className="flex flex-col items-center">
                 {posts.map((post, index) => (
@@ -54,6 +63,7 @@ const Home: React.FC = () => {
                         ? undefined
                         : index
                     }
+                    onDelete={handleDeletePost}
                   />
                 ))}
               </div>

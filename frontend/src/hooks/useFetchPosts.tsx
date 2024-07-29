@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../services/api"; // Api (ajustar)
+import api from "../services/api";
 
 type FetchState<T> = {
   data: T | null;

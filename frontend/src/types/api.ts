@@ -4,3 +4,14 @@ export interface PostType {
   title: string;
   description: string;
 }
+export interface CommentType {
+  id: number;
+  user_id: number;
+  user_name: string,
+  post_id: number;
+  text: string;
+}
+export interface UserType {
+  id: number;
+  name: string;
+}

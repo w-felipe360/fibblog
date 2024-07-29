@@ -1,42 +1,59 @@
-// src/pages/PostDetails.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { HiMiniPencilSquare, HiMiniTrash } from "react-icons/hi2";
 import { Navigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { useAuth } from "../contexts/AuthContext";
-import comments from "../data/comments"; // Importa o arquivo de comentários
-import posts from "../data/posts";
+import useFetchPosts from "../hooks/useFetchPosts";
+import api from "../services/api";
+import { PostType, CommentType } from "../types/api";
 
 const PostDetails: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [editingCommentId, setEditingCommentId] = React.useState<number | null>(
-    null
-  );
+  const [commentToDelete, setCommentToDelete] = React.useState<number | null>(null);
+  const [editingCommentId, setEditingCommentId] = React.useState<number | null>(null);
   const [editedCommentText, setEditedCommentText] = React.useState<string>("");
+  const [newCommentText, setNewCommentText] = React.useState<string>("");
+  const [comments, setComments] = React.useState<CommentType[]>([]);
 
   if (!isAuthenticated || !user) {
     return <Navigate to="/" />;
   }
 
   const { id } = useParams<{ id: string }>();
+  const { data: postData, loading: loadingPosts, error: errorPosts } = useFetchPosts<PostType[]>("/posts");
+  const { data: commentData, loading: loadingComments, error: errorComments } = useFetchPosts<CommentType[]>(`/comments?postId=${id}`);
 
-  // Busca os detalhes do post usando o id
-  const post = posts.find((post) => post.id === Number(id));
+  useEffect(() => {
+    if (commentData) {
+      setComments(commentData);
+    }
+  }, [commentData]);
 
-  // Filtra os comentários para o post atual
-  const postComments = comments.filter(
-    (comment) => comment.post_id === Number(id)
-  );
+  if (loadingPosts || loadingComments) return <div>Loading...</div>;
+  if (errorPosts || errorComments) return <div>Loading...</div>;
 
-  // Função para abrir o modal de exclusão
-  const openModal = (_id: number) => setIsModalOpen(true);
+  const post = postData?.find((post) => post.id === Number(id));
+  const postComments = comments.filter((comment) => comment.post_id === Number(id));
+
+  const openModal = (commentId: number) => {
+    setCommentToDelete(commentId);
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
 
-  const confirmDelete = () => {
-    // Lógica para deletar o post
-    console.log(`Post ${id} deletado`);
+  const deleteComment = async () => {
+    if (commentToDelete !== null) {
+      try {
+        await api.delete(`/comments/${commentToDelete}`);
+        setComments(comments.filter(comment => comment.id !== commentToDelete));
+        
+        console.log(`Comentário ${commentToDelete} excluído`);
+      } catch (error) {
+        console.error("Erro ao excluir comentário:", error);
+      }
+    }
     closeModal();
   };
 
@@ -45,12 +62,31 @@ const PostDetails: React.FC = () => {
     setEditedCommentText(commentText);
   };
 
-  const saveComment = () => {
-    // Lógica para salvar o comentário editado
-    console.log(
-      `Comentário ${editingCommentId} atualizado para: ${editedCommentText}`
-    );
-    setEditingCommentId(null);
+  const saveComment = async () => {
+    if (editingCommentId) {
+      try {
+        await api.put(`/comments/${editingCommentId}`, { text: editedCommentText });
+        setComments(comments.map(comment =>
+          comment.id === editingCommentId
+            ? { ...comment, text: editedCommentText }
+            : comment
+        ));
+        
+        console.log(`Comentário ${editingCommentId} atualizado para: ${editedCommentText}`);
+        setEditingCommentId(null);
+      } catch (error) {
+        console.error("Erro ao atualizar comentário:", error);
+      }
+    }
+  };
+  const createComment = async () => {
+    try {
+      const response = await api.post(`/comments/${id}`, { text: newCommentText, postId: id });
+      setComments([...comments, response.data]);
+      setNewCommentText("");
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
+    }
   };
 
   return (
@@ -68,20 +104,18 @@ const PostDetails: React.FC = () => {
           <h1 className="text-3xl font-bold mb-4">{post?.title} </h1>
           <p className="text-gray-700 mb-10">{post?.description}</p>
 
-          {/* Linha Horizontal para separar */}
           <hr className="my-6 border-gray-400" />
 
-          {/* Seção de Comentários */}
           <div>
             <h2 className="text-2xl font-bold mb-4">Comentários</h2>
-            {postComments.length > 0 ? (
+            {postComments?.length ? (
               postComments.map((comment) => (
                 <div
                   key={comment.id}
                   className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm flex flex-col lg:flex-row items-center justify-between"
                 >
                   <div className="w-full lg:w-full">
-                    <p className="font-semibold">Usuário {comment.user_id}:</p>
+                    <p className="font-semibold">{comment.user_name}:</p>
                     {editingCommentId === comment.id ? (
                       <div className="relative">
                         <textarea
@@ -134,7 +168,26 @@ const PostDetails: React.FC = () => {
             ) : (
               <p className="text-gray-700">Nenhum comentário ainda.</p>
             )}
+
+            {/* Formulário para adicionar novo comentário */}
+            <div className="mt-6">
+              <h2 className="text-2xl font-bold mb-4">Adicionar Comentário</h2>
+              <textarea
+                value={newCommentText}
+                onChange={(e) => setNewCommentText(e.target.value)}
+                rows={3}
+                className="w-full p-3 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none"
+                placeholder="Digite seu comentário..."
+              />
+              <button
+                onClick={createComment}
+                className="mt-3 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+              >
+                Adicionar Comentário
+              </button>
+            </div>
           </div>
+
           {isModalOpen && (
             <Modal
               onClose={closeModal}
@@ -143,7 +196,7 @@ const PostDetails: React.FC = () => {
             >
               <div className="flex gap-4">
                 <button
-                  onClick={confirmDelete}
+                  onClick={deleteComment}
                   className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
                 >
                   Sim, excluir

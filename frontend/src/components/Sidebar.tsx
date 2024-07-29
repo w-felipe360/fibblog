@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import {
   FaFacebookSquare,
   FaInstagramSquare,
-  FaTwitterSquare,
 } from "react-icons/fa";
-import Modal from "./Modal"; // Importar o componente Modal
+import linkedinSquare from "../assets/linkedinSquare.png";
+import Modal from "./Modal";
 
 const Sidebar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,24 +26,32 @@ const Sidebar: React.FC = () => {
           <div className="flex flex-col space-y-4">
             <a
               href="https://facebook.com"
+              target="_blank"
               className="flex items-center text-blue-600 hover:text-blue-800"
             >
               <FaFacebookSquare size={30} className="mr-2" />
               Facebook
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/fibbo.co"
+              target="_blank"
               className="flex items-center text-pink-500 hover:text-pink-600"
             >
               <FaInstagramSquare size={30} className="mr-2" />
               Instagram
             </a>
             <a
-              href="https://twitter.com"
-              className="flex items-center text-blue-400 hover:text-blue-600"
+              href="https://www.linkedin.com/company/fibbo-co"
+              target="_blank"
+              className="flex items-center text-blue-700 hover:text-blue-900"
             >
-              <FaTwitterSquare size={30} className="mr-2" />
-              Twitter
+              <img
+                src={linkedinSquare}
+                alt="LinkedIn"
+                className="mr-2"
+                style={{ width: 30, height: 30 }}
+              />
+              LinkedIn
             </a>
           </div>
         </div>

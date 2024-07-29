@@ -20,6 +20,10 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleGoToRegister = () => {
+    navigate("/register");
+  };
+
   return (
     <div
       className="w-[vw] h-[100vh] flex min-h-full flex-1 flex-col justify-center items-center px-6 py-12 lg:px-8"
@@ -97,6 +101,18 @@ const Login: React.FC = () => {
                 Entrar
               </button>
             </div>
+
+            {/* Botão para ir para a página de registro */}
+            <div>
+              <button
+                type="button"
+                onClick={handleGoToRegister}
+                className="flex w-full justify-center rounded-md bg-gray-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+              >
+                Criar uma conta
+              </button>
+            </div>
+
             {error && <p className="text-red-500 text-center">{error}</p>}
           </form>
         </div>

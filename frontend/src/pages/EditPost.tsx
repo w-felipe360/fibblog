@@ -1,54 +1,52 @@
-// src/pages/EditPost.tsx
-import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
-import posts from "../data/posts";
+import api from "../services/api";
 
 const EditPost: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<{
-    title: string;
-    description: string;
-  } | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (id) {
-      // Simular uma chamada para buscar os detalhes do post
-      // substituir pelo código real para buscar o post do servidor
-
-      const fetchedPost = posts.find((post) => post.id === Number(id));
-
-      if (!fetchedPost) {
-        navigate("/home");
-        return;
+    const fetchPost = async () => {
+      try {
+        const response = await api.get(`/posts/${id}`);
+        const post = response.data;
+        setTitle(post.title);
+        setDescription(post.description);
+      } catch (error) {
+        console.error("Error fetching post:", error);
       }
+    };
 
-      setPost(fetchedPost);
-      setTitle(fetchedPost.title);
-      setDescription(fetchedPost.description);
+    fetchPost();
+  }, [id]);
+
+  if (!isAuthenticated || !user) {
+    navigate("/home");
+    return;
+  }
+
+  const handleSave = async () => {
+    try {
+      const updatedPost = {
+        user_id: user.id,
+        title,
+        description,
+      };
+      const response = await api.put(`/posts/${id}`, updatedPost);
+      if (response.status !== 200) {
+        throw new Error("Failed to update post");
+      }
+      navigate(`/post/${id}`);
+    } catch (error) {
+      console.error("Error updating post:", error);
     }
-  }, [id, navigate]);
-
-  const handleSave = () => {
-    // Lógica para salvar as mudanças no post
-    // substituir pelo código real para salvar o post no servidor
-
-    console.log("Post saved", { title, description });
-    navigate(`/post/${id}`);
   };
-
-  if (!isAuthenticated) {
-    return <Navigate to="/" />;
-  }
-
-  if (!post) {
-    return <div>Carregando...</div>;
-  }
 
   return (
     <div

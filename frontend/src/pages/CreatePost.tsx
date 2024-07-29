@@ -1,9 +1,8 @@
-// src/pages/CreatePost.tsx
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
-import posts from "../data/posts";
+import api from "../services/api";
 
 const CreatePost: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
@@ -15,20 +14,22 @@ const CreatePost: React.FC = () => {
     return <Navigate to="/home" />;
   }
 
-  const handleSave = () => {
-    // Lógica para salvar o novo post
-    // substituir pelo código real para salvar o post no servidor
-
-    const newPost = {
-      id: posts.length + 1, // Exemplo simples, idealmente o servidor geraria o ID
-      user_id: user.id,
-      title,
-      description,
-    };
-
-    posts.push(newPost); // Isso é apenas um mock, deve ser substituído pelo serviço de persistência real
-    console.log("Post created", { title, description });
-    navigate(`/post/${newPost.id}`);
+  const handleSave = async () => {
+    try {
+      const newPost = {
+        user_id: user.id,
+        title,
+        description, 
+      };
+      const response = await api.post("/posts", newPost);
+      if (response.status !== 201) {
+        throw new Error("Failed to create post");
+      }
+      const createdPost = response.data;
+      navigate(`/post/${createdPost.id}`);
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
   };
 
   return (
@@ -80,7 +81,7 @@ const CreatePost: React.FC = () => {
               onClick={handleSave}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
             >
-              Save
+              Salvar
             </button>
           </form>
         </div>

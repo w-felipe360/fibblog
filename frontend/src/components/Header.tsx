@@ -6,7 +6,7 @@ import { IoMdCreate } from "react-icons/io";
 
 const Header: React.FC = () => {
   const { logout } = useAuth();
-  const navigate = useNavigate(); // Add this line to import the useNavigate function
+  const navigate = useNavigate();
 
   return (
     <div className="flex w-full items-center justify-center">

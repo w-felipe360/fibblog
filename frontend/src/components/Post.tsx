@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { HiMiniPencilSquare, HiMiniTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import api from "../services/api";
 
 interface PostProps {
   id: number;
@@ -9,6 +10,7 @@ interface PostProps {
   description: string;
   index?: number;
   isPostFromUser?: boolean;
+  onDelete: (postId: number) => void;
 }
 
 const Post: React.FC<PostProps> = ({
@@ -17,6 +19,7 @@ const Post: React.FC<PostProps> = ({
   description,
   index,
   isPostFromUser,
+  onDelete,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -30,9 +33,9 @@ const Post: React.FC<PostProps> = ({
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const confirmDelete = () => {
-    // Lógica para deletar o post
-    console.log(`Post ${id} deletado`);
+  const confirmDelete = async () => {
+    await api.delete(`/posts/${id}`);
+    onDelete(id);
     closeModal();
   };
 
