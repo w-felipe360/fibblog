@@ -49,8 +49,8 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
 
 #### Tela de login:
 
-<img src="https://raw.githubusercontent.com/w-felipe360/images/main/fibblogLoginScreen.jpeg" alt="Tela de login" width="600">
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/fibblogLoginScreen.jpeg" alt="Login screen" width="600">
 
-#### Tela de registro:
+#### Registration Screen:
 
-<img src="https://raw.githubusercontent.com/w-felipe360/images/main/registerScreenFibbo.jpeg"alt="Tela de registro" width="600">
+<img src="https://raw.githubusercontent.com/w-felipe360/images/main/registerScreenFibbo.jpeg" alt="Login screen" width="600">
