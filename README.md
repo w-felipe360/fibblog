@@ -40,10 +40,7 @@ Este é um projeto de aplicação full-stack para um blog onde os usuários pode
     cd fibblog
 3. **Inicie os conteiners:**
     ```bash
-    docker-compose up -d
-4. **Assim que o banco iniciar, inicie o conteiner do back-end:**
-    ```bash
-    docker-compose start fibblog-backend
+    docker-compose up --build
 
 ### Screenshots:
 
