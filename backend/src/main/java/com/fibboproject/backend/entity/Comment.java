@@ -48,4 +48,8 @@ public class Comment {
     public Post getPost() {
         return post;
     }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

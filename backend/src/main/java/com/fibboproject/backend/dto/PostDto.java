@@ -8,15 +8,15 @@ import lombok.Setter;
 public class PostDto {
 
     private Long id;
+    private Long user_id;
     private String title;
     private String description;
-    private Long user_id;
 
     public PostDto(Long id, String title, String description, Long userId) {
         this.id = id;
+        this.user_id = userId;
         this.title = title;
         this.description = description;
-        this.user_id = userId;
     }
     public Long getId() {
         return id;

@@ -43,6 +43,7 @@ public class CommentController {
                 .map(comment -> new CommentDto(
                         comment.getId(),
                         comment.getUser().getId(),
+                        comment.getUser().getName(),
                         comment.getText(),
                         comment.getPost().getId()
                 ))
@@ -64,10 +65,65 @@ public class CommentController {
         CommentDto commentDto = new CommentDto(
                 savedComment.getId(),
                 savedComment.getUser().getId(),
+                savedComment.getUser().getName(),
                 savedComment.getText(),
                 savedComment.getPost().getId()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(commentDto);
     }
+    @GetMapping
+    public ResponseEntity<List<CommentDto>> getAllComments() {
+        List<Comment> comments = commentService.getAllComments();
+        List<CommentDto> commentDtos = comments.stream()
+                .map(comment -> new CommentDto(
+                        comment.getId(),
+                        comment.getUser().getId(),
+                        comment.getUser().getName(),
+                        comment.getText(),
+                        comment.getPost().getId()
+                ))
+                .collect(Collectors.toList());
 
+        return ResponseEntity.ok(commentDtos);
+    }
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentDto> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid CreateCommentDto updateCommentDto) {
+        Comment comment = commentService.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        User authenticatedUser = (User) userDetails;
+        if (!comment.getUser().equals(authenticatedUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Ou qualquer outra resposta de erro apropriada
+        }
+        comment.setText(updateCommentDto.getText());
+        Comment updatedComment = commentService.save(comment);
+        CommentDto commentDto = new CommentDto(
+                updatedComment.getId(),
+                updatedComment.getUser().getId(),
+                updatedComment.getUser().getName(),
+                updatedComment.getText(),
+                updatedComment.getPost().getId()
+        );
+        return ResponseEntity.ok(commentDto);
+    }
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        Comment comment = commentService.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        User authenticatedUser = (User) userDetails;
+
+        if (!comment.getUser().equals(authenticatedUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        commentService.delete(commentId);
+        return ResponseEntity.noContent().build();
+    }
 }
